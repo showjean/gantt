@@ -688,32 +688,18 @@ export default class Bar {
 
         let padding = 5;
         let x_offset_label_img = this.image_size + 10;
-        const labelWidth = label.getBBox().width;
-        const barWidth = bar.getWidth();
-        if (labelWidth > barWidth) {
-            label.classList.add('big');
-            if (img) {
-                img.setAttribute('x', bar.getEndX() + padding);
-                img_mask.setAttribute('x', bar.getEndX() + padding);
-                label.setAttribute('x', bar.getEndX() + x_offset_label_img);
-            } else {
-                label.setAttribute('x', bar.getEndX() + padding);
-            }
+        if (img) {
+            img.setAttribute('x', bar.getX() + padding);
+            img_mask.setAttribute('x', bar.getX() + padding);
+            label.setAttribute(
+                'x',
+                bar.getX() + x_offset_label_img,
+            );
         } else {
-            label.classList.remove('big');
-            if (img) {
-                img.setAttribute('x', bar.getX() + padding);
-                img_mask.setAttribute('x', bar.getX() + padding);
-                label.setAttribute(
-                    'x',
-                    bar.getX() + barWidth / 2 + x_offset_label_img,
-                );
-            } else {
-                label.setAttribute(
-                    'x',
-                    bar.getX() + barWidth / 2 - labelWidth / 2,
-                );
-            }
+            label.setAttribute(
+                'x',
+                bar.getX() + padding,
+            );
         }
     }
 
