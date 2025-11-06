@@ -22,7 +22,7 @@ export default class Popup {
         this.actions = this.parent.querySelector('.actions');
     }
 
-    show({ x, y, task, target }) {
+    show({ x, y, task, target, container}) {
         this.actions.innerHTML = '';
         let html = this.popup_func({
             task,
@@ -49,10 +49,23 @@ export default class Popup {
 
         if (this.actions.innerHTML === '') this.actions.remove();
         else this.parent.appendChild(this.actions);
-
-        this.parent.style.left = x + 10 + 'px';
-        this.parent.style.top = y - 10 + 'px';
         this.parent.classList.remove('hide');
+        
+        // after render
+        let left = x + 10;
+        let top = y - 10;
+        let height = this.parent.clientHeight;
+        let width = this.parent.clientWidth;
+        const maxHeight = container.clientHeight + container.scrollTop;
+        const maxWidth = container.clientWidth + container.scrollLeft;
+        if (top + height > maxHeight - 10) { // 화면을 넘어서면 - 하단
+            top = maxHeight - height - 10;
+        }
+        this.parent.style.top = top + 'px'
+        if (left + width > maxWidth - 10) { // 화면을 넘어서면 - 우측
+            left = maxWidth - width - 10;
+        }
+        this.parent.style.left = left + 'px'
     }
 
     hide() {
