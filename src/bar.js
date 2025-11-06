@@ -453,22 +453,21 @@ export default class Bar {
     }
 
     update_label_position_on_horizontal_scroll({ x, sx }) {
-        const container = this.gantt.$container;
         const label = this.group.querySelector('.bar-label');
         const img = this.group.querySelector('.bar-img') || '';
         const img_mask = this.bar_group.querySelector('.img_mask') || '';
 
         const padding = 5;
+        const dx = (x||0);
         let barX = this.$bar.getX();
         let labelMinX = barX + padding;
         let barWidthLimit = barX + this.$bar.getWidth();
         let labelMaxX = barWidthLimit - label.getBBox().width - padding;
-        let newLabelX = Math.min(Math.max(label.getX() + x, labelMinX), labelMaxX);
-        let newImgX = (img && img.getX() + x) || 0;
-
-        if (label.classList.contains('big')) return;
+        let newLabelX = Math.min(Math.max(label.getX() + dx, labelMinX), labelMaxX);
+        let newImgX = (img && img.getX() + dx) || 0;
 
         console.log('dx: ', x, 'sx: ', sx, 'bar x ', barX, 'newLabelX: ', newLabelX);
+        
         if (
             x > 0 &&
             newLabelX >= labelMinX &&
@@ -480,7 +479,18 @@ export default class Bar {
                 img.setAttribute('x', newImgX);
                 img_mask.setAttribute('x', newImgX);
             }
-        } else if (x < 0 && newLabelX >= labelMinX && newLabelX <= labelMaxX) {
+        } else if (
+            x < 0 && 
+            newLabelX >= labelMinX && 
+            newLabelX <= labelMaxX && 
+            sx < labelMaxX - padding
+        ) {
+            label.setAttribute('x', newLabelX);
+            if (img) {
+                img.setAttribute('x', newImgX);
+                img_mask.setAttribute('x', newImgX);
+            }
+        } else if (!x) {
             label.setAttribute('x', newLabelX);
             if (img) {
                 img.setAttribute('x', newImgX);
