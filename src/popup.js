@@ -22,7 +22,8 @@ export default class Popup {
         this.actions = this.parent.querySelector('.actions');
     }
 
-    show({ x, y, task, target, container}) {
+    show({ x, y, task, target}) {
+        const container = this.gantt.$container;
         this.actions.innerHTML = '';
         let html = this.popup_func({
             task,

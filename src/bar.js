@@ -353,7 +353,6 @@ export default class Bar {
                     y: e.offsetY || e.layerY,
                     task: this.task,
                     target: this.$bar,
-                    container: this.gantt.$container,
                 });
             });
         }
@@ -366,7 +365,6 @@ export default class Bar {
                         y: e.offsetY || e.layerY,
                         task: this.task,
                         target: this.$bar,
-                        container: this.gantt.$container,
                     });
                 this.gantt.$container
                     .querySelector(`.highlight-${task_id}`)
