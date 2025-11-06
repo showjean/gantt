@@ -15,6 +15,7 @@ export default defineConfig({
                 entryFileNames: 'frappe-gantt.[format].js'
             },
         },
+        minify: true,
     },
     output: { interop: 'auto' },
     server: { watch: { include: ['dist/*', 'src/*'] } }
