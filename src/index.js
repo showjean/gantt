@@ -948,7 +948,7 @@ export default class Gantt {
 
         this.$container.scrollTo({
             left: scroll_pos - this.config.column_width / 6,
-            behavior: this.config.scroll_behavior,
+            behavior: this.options.scroll_behavior,
         });
 
         // Calculate current scroll position's upper text
@@ -1259,7 +1259,7 @@ export default class Gantt {
                 this.$adjust.onclick = () => {
                     this.$container.scrollTo({
                         left: max_start,
-                        behavior: this.config.scroll_behavior,
+                        behavior: this.options.scroll_behavior,
                     });
                 };
             } else if (
@@ -1271,7 +1271,7 @@ export default class Gantt {
                 this.$adjust.onclick = () => {
                     this.$container.scrollTo({
                         left: min_start,
-                        behavior: this.config.scroll_behavior,
+                        behavior: this.options.scroll_behavior,
                     });
                 };
             } else {
