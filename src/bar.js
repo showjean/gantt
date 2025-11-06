@@ -458,26 +458,29 @@ export default class Bar {
         const img = this.group.querySelector('.bar-img') || '';
         const img_mask = this.bar_group.querySelector('.img_mask') || '';
 
-        let barWidthLimit = this.$bar.getX() + this.$bar.getWidth();
-        let newLabelX = label.getX() + x;
+        const padding = 5;
+        let barX = this.$bar.getX();
+        let labelMinX = barX + padding;
+        let barWidthLimit = barX + this.$bar.getWidth();
+        let labelMaxX = barWidthLimit - label.getBBox().width - padding;
+        let newLabelX = Math.min(Math.max(label.getX() + x, labelMinX), labelMaxX);
         let newImgX = (img && img.getX() + x) || 0;
-        let imgWidth = (img && img.getBBox().width + 7) || 7;
-        let labelEndX = newLabelX + label.getBBox().width + 7;
-        let viewportCentral = sx + container.clientWidth / 2;
 
         if (label.classList.contains('big')) return;
 
-        if (labelEndX < barWidthLimit && x > 0 && labelEndX < viewportCentral) {
+        console.log('dx: ', x, 'sx: ', sx, 'bar x ', barX, 'newLabelX: ', newLabelX);
+        if (
+            x > 0 &&
+            newLabelX >= labelMinX &&
+            newLabelX <= labelMaxX &&
+            sx > barX // bar 가 앞쪽으로 들어간 상태
+        ) {
             label.setAttribute('x', newLabelX);
             if (img) {
                 img.setAttribute('x', newImgX);
                 img_mask.setAttribute('x', newImgX);
             }
-        } else if (
-            newLabelX - imgWidth > this.$bar.getX() &&
-            x < 0 &&
-            labelEndX > viewportCentral
-        ) {
+        } else if (x < 0 && newLabelX >= labelMinX && newLabelX <= labelMaxX) {
             label.setAttribute('x', newLabelX);
             if (img) {
                 img.setAttribute('x', newImgX);
