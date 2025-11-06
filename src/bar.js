@@ -452,24 +452,34 @@ export default class Bar {
         this.update_arrow_position();
     }
 
-    update_label_position_on_horizontal_scroll({ x, sx }) {
+    update_label_position_on_horizontal_scroll({ sx }) {
         const label = this.group.querySelector('.bar-label');
         const img = this.group.querySelector('.bar-img') || '';
         const img_mask = this.bar_group.querySelector('.img_mask') || '';
 
         const padding = 5;
-        const dx = (x||0);
-        let barX = this.$bar.getX();
-        let labelMinX = barX + padding;
+        let barX = +this.$bar.getX();
         let barWidthLimit = barX + this.$bar.getWidth();
+        let labelMinX = barX + padding;
         let labelMaxX = barWidthLimit - label.getBBox().width - padding;
-        let newLabelX = Math.min(Math.max(label.getX() + dx, labelMinX), labelMaxX);
-        let newImgX = (img && img.getX() + dx) || 0;
 
-        console.log('dx: ', x, 'sx: ', sx, 'bar x ', barX, 'newLabelX: ', newLabelX);
+        let newLabelX;
+        if (barX < sx) {
+            newLabelX = sx + padding;
+        } else if (barX >= sx) {
+            newLabelX = barX + padding;
+        }
+        newLabelX = Math.min(Math.max(newLabelX, labelMinX), labelMaxX);
+
+        let newImgX;
+        if (img) {
+            newImgX = newLabelX;
+            newLabelX = newImgX + img.getBBox().width + 7;
+        }
+
+        console.log('sx: ', sx, 'bar x ', barX, 'newLabelX: ', newLabelX);
         
         if (
-            x > 0 &&
             newLabelX >= labelMinX &&
             newLabelX <= labelMaxX &&
             sx > barX // bar 가 앞쪽으로 들어간 상태
@@ -480,17 +490,10 @@ export default class Bar {
                 img_mask.setAttribute('x', newImgX);
             }
         } else if (
-            x < 0 && 
             newLabelX >= labelMinX && 
             newLabelX <= labelMaxX && 
             sx < labelMaxX - padding
         ) {
-            label.setAttribute('x', newLabelX);
-            if (img) {
-                img.setAttribute('x', newImgX);
-                img_mask.setAttribute('x', newImgX);
-            }
-        } else if (!x) {
             label.setAttribute('x', newLabelX);
             if (img) {
                 img.setAttribute('x', newImgX);
@@ -692,6 +695,13 @@ export default class Bar {
     }
 
     update_label_position() {
+        if (this.gantt.options.auto_move_label) {
+            this.update_label_position_on_horizontal_scroll({
+                sx: this.gantt.$container.scrollLeft
+            })
+            return;
+        }
+        
         const img_mask = this.bar_group.querySelector('.img_mask') || '';
         const bar = this.$bar,
             label = this.group.querySelector('.bar-label'),

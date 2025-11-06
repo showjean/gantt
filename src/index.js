@@ -681,7 +681,8 @@ export default class Gantt {
     /**
      * Compute the horizontal x-axis distance and associated date for the current date and view.
      *
-     * @returns Object containing the x-axis distance and date of the current date, or null if the current date is out of the gantt range.
+     * @returns Object containing the x-axis distance and date of the current date, or null if the current date is out
+     *     of the gantt range.
      */
     highlight_current() {
         const res = this.get_closest_date();
@@ -1283,7 +1284,6 @@ export default class Gantt {
                 if (this.options.auto_move_label) {
                     localBars.forEach((bar) => {
                         bar.update_label_position_on_horizontal_scroll({
-                            x: dx,
                             sx: e.currentTarget.scrollLeft,
                         });
                     });
