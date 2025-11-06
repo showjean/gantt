@@ -542,7 +542,9 @@
                 { name: 'Christmas', date: '2024-12-25' },
             ];
 
-            const mutablity = new Gantt('#mutability', tasks);
+            const mutablity = new Gantt('#mutability', tasks, {
+                scroll_behavior: 'instant',
+            });
             const sideheader = new Gantt('#sideheader', tasksSpread, {
                 today_button: true,
                 view_mode_select: true,

@@ -150,6 +150,7 @@ const DEFAULT_OPTIONS = {
     readonly_dates: false,
     readonly: false,
     scroll_to: 'today',
+    scroll_behavior: 'smooth',
     show_expected_progress: false,
     today_button: true,
     view_mode: 'Day',
